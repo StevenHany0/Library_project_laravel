@@ -9,6 +9,9 @@ class BookController extends Controller
 {
     public function index()
     {
+        $books = Book::all();
+
+        return view('book.list', compact('books'));
 
     }
 
@@ -20,21 +23,23 @@ class BookController extends Controller
     public function store(Request $request)
     {
 
+
         $name = $request->name;
         $description = $request->description;
         $price = $request->price;
-        $author=$request->author;
+        $author = $request->author;
 
         $data = [
             'name' => $name,
             'description' => $description,
             'price' => $price,
-            'author'=>$author 
+            'author' => $author
         ];
 
         Book::create($data);
-
-        return view('book.success');
+        $books = Book::all();
+        
+        return view('book.list',compact('books'));
     }
 
 
