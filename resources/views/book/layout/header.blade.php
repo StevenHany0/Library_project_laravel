@@ -6,10 +6,16 @@
                 <a class="nav-link" href="/">Home</a>
             </li>
             <li class="nav-item {{request()->is('books/create') ? 'active' : ''}}">
-                <a class="nav-link" href="{{route('create')}}">Create Book</a>
+                <a class="nav-link" href="{{route('books.create')}}">Create Book</a>
             </li>
             <li class="nav-item {{request()->is('books/list') ? 'active' : ''}}">
-                <a class="nav-link" href="{{route('list')}}">List Books</a>
+                <a class="nav-link" href="{{route('books.list')}}">List Books</a>
+            </li>
+            <li class="nav-item {{request()->is('authors/create') ? 'active' : ''}}">
+                <a class="nav-link" href="{{route('authors.create')}}">Create author</a>
+            </li>
+            <li class="nav-item {{request()->is('authors/list') ? 'active' : ''}}">
+                <a class="nav-link" href="{{route('authors.list')}}">List Authors</a>
             </li>
         </ul>
         <form class="form-inline" action="/action_page.php" style="position: absolute; right: 1%;">
