@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use App\Models\Book;
+use App\Models\Author;  
 
 class BookController extends Controller
 {
@@ -18,15 +19,17 @@ class BookController extends Controller
 
     public function create()
     {
-        return view('book.create');
+        $authors = Author::all();
+        return view('book.create', compact('authors'));
     }
 
     public function edit($id)
     {
 
 
+        $authors = Author::all();
         $book = Book::find($id);
-        return view('book.edit', compact('book'));
+        return view('book.edit', compact('book') , compact('authors'));
     }
 
     public function update(Request $request)
@@ -36,8 +39,9 @@ class BookController extends Controller
                 'name' => 'required|alpha:ascii',
                 'description' => 'required',
                 'price' => 'required|numeric',
-                'author' => 'required|alpha:ascii',
-                'image' => 'nullable|mimes:jpeg,jpg,gif,webp'
+                'image' => 'nullable|mimes:jpeg,jpg,gif,webp',
+                'author_id' => 'nullable'
+                
             ]
         );
 
@@ -58,8 +62,8 @@ class BookController extends Controller
                 'name' => $request->name,
                 'description' => $request->description,
                 'price' => $request->price,
-                'author' => $request->author,
                 'image' => $path . $filename,
+                'author_id' => $request->author_id
             ]
         );
 
@@ -76,15 +80,18 @@ class BookController extends Controller
                 'name' => 'required|string',
                 'description' => 'required|string',
                 'price' => 'required|numeric',
-                'author' => 'required|alpha:ascii',
-                'image' => 'nullable|mimes:jpeg,jpg,gif,webp'
+                'image' => 'nullable|mimes:jpeg,jpg,gif,webp',
+                'author_id' => 'nullable'
+
+                
             ]
         );
 
         $name = $request->name;
         $description = $request->description;
         $price = $request->price;
-        $author = $request->author;
+        $author_id = $request->author_id;
+
 
         if ($request->has('image')) {
             $file = $request->file('image');
@@ -93,16 +100,16 @@ class BookController extends Controller
             $path = 'assets/files/';
             $file->move($path, $filename);
 
-
         }
         $data = [
             'name' => $name,
             'description' => $description,
             'price' => $price,
-            'author' => $author,
-            'image' => $path . $filename
+            'image' => $path . $filename,
+            'author_id' => $author_id
         ];
 
+        
         Book::create($data);
         $books = Book::all();
 

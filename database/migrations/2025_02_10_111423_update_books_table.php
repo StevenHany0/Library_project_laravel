@@ -11,7 +11,9 @@ return new class extends Migration {
     public function up(): void
     {
 
-        
+        Schema::table('books', function (Blueprint $table) {
+            $table->foreign('author_id')->references('id')->on('authors')->onDelete('cascade');
+        });
 
 
     }
@@ -21,6 +23,9 @@ return new class extends Migration {
      */
     public function down(): void
     {
-      
+      Schema::table('books', function (Blueprint $table) {
+            $table->dropForeign(['author_id']);
+        });
+
     }
 };

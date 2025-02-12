@@ -8,7 +8,7 @@ use App\Http\Controllers\AuthorController;
 //Route::get('/books/create', 'BookController@create');
 
 Route::get('/', function () {
-    return view('book.layout.welcome');
+    return view('welcome');
 });
 
 Route::get('/books/list', [BookController::class,'index'])->name('books.list');

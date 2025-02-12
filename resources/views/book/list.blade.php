@@ -1,52 +1,45 @@
-@extends('book.layout.master')
-@section('content')
-<div class="container">
-    <h1>Books List</h1>
 
-    <table class="table-dark table-striped table-bordered table-hover table-width w-100">
+@extends('layout.master')
+@section('my-body')
+<table class="table table-striped ">
+    <thead>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Author</th>
+        <th>Image</th>
+        <th>created_at</th>
+        <th scope="col-2">Actions</th>
+    </thead>
+    <tbody>
 
-        <thead>
+        @foreach ($books as $book)
             <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Author</th>
-                <th>Image</th>
-                <th>Created At</th>
-                <th>Updated At</th>
-                <th>Actions</th>
+                <th>{{$book->id}}</th>
+                <td>{{$book->name}}</td>
+                <td>{{$book->description}}</td>
+                <td>{{$book->price}}</td>
+                <td>{{$book->author? $book->author->name:NULL}}</td>
+                <td><img src="{{ asset($book->image) }}" alt="{{ $book->name }}" class="img-thumbnail" width="100"></td>
+                <td>{{ \Carbon\Carbon::parse($book->created_at)->format('d/m/Y H:i') }}</td>
+                <td>
+                    <a href="/books/edit/{{$book->id}}" class="btn btn-success">Update</a>
+
+                    <form action="/books/delete/{{$book->id}}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+
             </tr>
-        </thead>
+        @endforeach
 
-        <tbody>
-            @foreach($books as $book)
-                <tr>
-                    <td>{{ $book->name }}</td>
-                    <td>{{ $book->description }}</td>
-                    <td>{{ $book->price }}</td>
-                    <td>{{ $book->author }}</td>
-                    <td><img src="{{ asset($book->image) }}" alt="{{ $book->name }}" class="img-thumbnail" width="100"></td>
-                    <td>{{ \Carbon\Carbon::parse($book->created_at)->format('d/m/Y H:i') }}</td>
-                    <td>{{ \Carbon\Carbon::parse($book->updated_at)->format('d/m/Y H:i') }}</td>
-                    <td class="text-inline"><a class="btn btn-success" href="/books/edit/{{$book->id}}">Update</a>
-                        <form method="post" action="/books/delete/{{$book->id}}" class=" my-2">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-
-
-        <tfoot>
-            <tr>
-                <td colspan="6" class="p-3">{{ $books->count() }} Books</td>
-            </tr>
-        </tfoot>
-    </table>
-
-
-</div>
+    </tbody>
+    <tr>
+        <td colspan="8"><a href="/books/create"><button class="btn btn-success">Create New Book <i
+                        class="fa-solid fa-pen-to-square"></i></button></a></td>
+    </tr>
+</table>
 @endsection

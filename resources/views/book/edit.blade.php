@@ -1,53 +1,48 @@
-@extends('book.layout.master')
-@section('content')
-
-<h1>Edit Book</h1>
-
-<form action="/books/update" method="post" style="height: 1000px;" enctype="multipart/form-data">
+@extends('layout.master')
+@section('my-body')
+<form class="form-container" action="/books/update" method="post" enctype="multipart/form-data">
     @csrf
+    <fieldset>
+        <legend>Update Book</legend>
+        <br>
+        <input type="hidden" name="id" value="{{$book->id}}">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="{{$book->name}}">
+        @error('name')
+            <div style="color: red;">{{ $message }}</div>
+        @enderror
 
-    <input type="hidden" name="id" value="{{ $book->id }}">
-    <div class="form-group">
-        <label for="name">Title:</label>
-        <input type="text" name="name" class="form-control" value="{{ $book->name }}" required>
-    </div>
-    @error('name')
-        <p class="mt-2 text-sm/6 text-red-600">{{ $message }}</p>
-    @enderror
+        <label for="description">description:</label>
+        <textarea id="description" name="description">{{$book->description}}</textarea>
+        @error('description')
+            <div style="color: red;">{{ $message }}</div>
+        @enderror
 
-    <div class="form-group">
-        <label for="description">Description:</label>
-        <textarea name="description" class="form-control" required>{{ $book->description }}</textarea>
-    </div>
-    @error('description')
-        <p class="mt-2 text-sm/6 text-red-600">{{ $message }}</p>
-    @enderror
-
-    <div class="form-group">
         <label for="price">Price:</label>
-        <input type="number" name="price" class="form-control" step="0.01" value="{{ $book->price }}" required>
-    </div>
-    @error('price')
-        <p class="mt-2 text-sm/6 text-red-600">{{ $message }}</p>
-    @enderror
+        <input type="text" id="price" name="price" value="{{$book->price}}">
+        @error('price')
+            <div style="color: red;">{{ $message }}</div>
+        @enderror
 
-    <div class="form-group">
-        <label for="author">Author:</label>
-        <input type="text" name="author" class="form-control" value="{{ $book->author}}" required>
-    </div>
-    @error('author')
-        <p class="mt-2 text-sm/6 text-red-600">{{ $message }}</p>
-    @enderror
+        <select name="author_id" id="author_id" class="form-select">
+            <option value="">Select Author</option>
+            @foreach($authors as $author)
+                <option value="{{ $author->id }}" {{ old('author_id') == $author->id ? 'selected' : '' }}>
+                    {{ $author->name }}
+                </option>
+            @endforeach
+        </select><br>
 
-    <div class="form-group">
-        <label for="image">Upload Image:</label>
-        <input type="file" name="image" class="" value="{{ old('image') }}" required>
-    </div>
-    @error('image')
-        <p class="mt-2 text-sm/6 text-red-600">{{ $message }}</p>
-    @enderror
+        <div class="form-group">
+            <label for="image">Upload Image:</label>
+            <input type="file" name="image" class="" value="{{ $book->image }}" required>
+        </div>
+        @error('image')
+            <p class="mt-2 text-sm/6 text-red-600">{{ $message }}</p>
+        @enderror
 
-    <button type="submit" class="btn btn-primary">Update Book</button>
+        
+        <button class="btn btn-success">Update</button>
+    </fieldset>
 </form>
-
 @endsection

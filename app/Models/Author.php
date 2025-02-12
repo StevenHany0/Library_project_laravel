@@ -10,7 +10,11 @@ class Author extends Model
     /** @use HasFactory<\Database\Factories\AuthorFactory> */
     use HasFactory;
 
-    protected $fillable = ['name', 'bio', 'profile_picture','job_description','email','book_id'];
+    protected $fillable = ['name', 'bio', 'profile_pic','job_description','email','book_id'];
 
-   
+    public function book()
+    {
+        return $this->belongsTo(Book::class);
+    }
+
 }

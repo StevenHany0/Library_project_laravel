@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('authors', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('book_id')->constrained('books')->onDelete('cascade')->nullable();
+            $table->unsignedBigInteger('book_id')->nullable();
+            $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');
             $table->string('email');
             $table->string('bio');
-            $table->string('profile_picture')->nullable(); ;
+            $table->string('profile_pic')->nullable(); ;
             $table->string('job_description');
             $table->string('name');
             $table->timestamps();

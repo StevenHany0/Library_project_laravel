@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use App\Models\Author;
+use App\Models\Book;
 
 class AuthorController extends Controller
 {
@@ -17,36 +19,50 @@ class AuthorController extends Controller
 
     public function create()
     {
-        return view('author.create');
+        $books = Book::all();
+        return view('author.create',compact('books'));
     }
 
     public function edit($id)
     {
      
-        
+        $books= Book::all();
         $author = Author::find($id);
-        return view('author.edit',compact('author'));
+        return view('author.edit',compact('author'),compact('books'));
     }
 
     public function update(Request $request)
     {
         $request->validate(
             [
-                'name' => 'required|alpha:ascii',
-                'description' => 'required',
-                'price' => 'required|numeric',
-                'author' => 'required|alpha:ascii',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+                'name' => 'required|string',
+                'job_description' => 'required|string',
+                'bio' => 'required|string',
+                'email' => 'required|email',
+                'profile_pic' => 'nullable|mimes:jpeg,gif,jpg,webp',
+                'book_id' => 'nullable'
             ]
         );
         $author = Author::find($request->id);
+        if ($request->has('profile_pic')) {
+            $file = $request->file('profile_pic');
+            $extention = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extention;
+            $path = 'assets/files/';
+            $file->move($path, $filename);
+            
+            if (File::exists(public_path($author->profile_pic))) {
+                File::delete(public_path($author->profile_pic));
+            }
+        }
         $author->update(
             [
                 'name' => $request->name,
-                'description' => $request->description,
-                'price' => $request->price,
-                'author' => $request->author,
-                'image' => $request->file('image')->store('assets/files','public')
+                'job_description' => $request->job_description,
+                'bio' => $request->bio,
+                'email' => $request->email,
+                'book_id' => $request->book_id,
+                'profile_pic' => $path . $filename
             ]
         );
         
@@ -59,32 +75,39 @@ class AuthorController extends Controller
 
         $request->validate(
             [
-                'name' => 'required|alpha:ascii',
-                'description' => 'required',
-                'price' => 'required|numeric',
-                'author' => 'required|alpha:ascii',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+                'name' => 'required|string',
+                'job_description' => 'required|string',
+                'bio' => 'required|string',
+                'email' => 'required|email',
+                'profile_pic' => 'nullable|mimes:jpeg,gif,jpg,webp',
+                'book_id' => 'nullable'
 
             ]
         );
 
-        $name = $request->name;
-        $description = $request->description;
-        $price = $request->price;
-        $author = $request->author;
+        if ($request->has('profile_pic')) {
+            $file = $request->file('profile_pic');
+            $extention = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extention;
+            $path = 'assets/files/';
+            $file->move($path, $filename);
+            
+            
+        }
 
         $data = [
-            'name' => $name,
-            'description' => $description,
-            'price' => $price,
-            'author' => $author,
-            'image' => $request->file('image')->store('assets/files','public')
+            'name' => $request->name,
+            'job_description' => $request->job_description,
+            'bio' => $request->bio,
+            'email' => $request->email,
+            'book_id' => $request->book_id,
+            'profile_pic' => $path . $filename
         ];
 
         Author::create($data);
         $authors = Author::all();
         
-        return view('book.author.list',compact('authors'));
+        return view('author.list',compact('authors'));
     }
 
     public function delete($id)
@@ -92,7 +115,7 @@ class AuthorController extends Controller
         $author = Author::find($id);
         $author->delete();
         $authors = Author::all();
-        return view('book.author.list',compact('authors'));
+        return view('author.list',compact('authors'));
     }
 
 
