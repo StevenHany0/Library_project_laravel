@@ -33,6 +33,24 @@
             @endforeach
         </select><br>
 
+        <select name="student_id" id="student_id" class="form-select">
+            <option value="">Select Student</option>
+            @foreach($students as $student)
+                <option value="{{ $student->id }}" {{ old('student_id') == $student->id ? 'selected' : '' }}>
+                    {{ $student->name }}
+                </option>
+            @endforeach
+        </select><br>
+
+        <select name="category_ids[]" id="category_ids" class="form-select" multiple>
+            <option value="">Select Catagories</option>
+            @foreach($categories as $category)
+            <option value="{{ $category->id }}">
+                    {{ $category->name }}
+                </option>
+            @endforeach
+        </select><br>
+
         <div class="form-group">
             <label for="image">Upload Image:</label>
             <input type="file" name="image" class="" value="{{ $book->image }}" required>

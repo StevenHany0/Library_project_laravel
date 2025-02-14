@@ -1,34 +1,44 @@
 * {
-    padding: 0;
-    margin: 0;
+
     color: white;
     font-family: sans-serif;
 }
+
 :root {
     --main-color: #0b5cab;
     --transparent-color: rgba(46, 167, 204, 0.7);
 }
+
 body {
     background-color: #001;
     display: flex;
 }
+
+
+
 .menu {
+    margin-top: 40px;
+    position: fixed;
     background-color: #123;
     width: 100px;
-    height: 100vh;
+    height: hv;
+    min-height: 100vh;
     padding: 30px 10px 20px 0px;
     overflow: hidden;
     transition: 0.5s;
 }
+
 .menu:hover {
     width: 280px;
 }
+
 .profile {
     display: flex;
     margin-bottom: 30px;
     align-items: center;
     gap: 20px;
 }
+
 .profile .img-box {
     width: 50px;
     height: 50px;
@@ -37,18 +47,22 @@ body {
     border: 3px solid white;
     flex-shrink: 0;
 }
+
 .profile .img-box img {
     width: 100%;
 }
+
 .profile h2 {
     font-size: 20px;
     text-transform: capitalize;
 }
+
 ul {
     list-style: none;
     position: relative;
     height: 95%;
 }
+
 ul li a {
     display: block;
     text-decoration: none;
@@ -59,25 +73,31 @@ ul li a {
     gap: 30px;
     transition: 0.5s;
 }
+
 ul li a:hover,
 td:hover {
     background-color: #ffffff55;
 }
+
 ul li a i {
     font-size: 30px;
 }
+
 .content {
     width: 100%;
     margin: 20px;
 }
+
 .content * {
     color: #123;
     text-align: center;
 }
+
 legend {
     color: var(--main-color) !important;
     margin-bottom: 20px !important;
 }
+
 .form-container {
     max-width: 500px;
     margin: auto;
@@ -86,12 +106,14 @@ legend {
     border-radius: 10px;
     box-shadow: -2px 2px 5px 2px rgba(0, 0, 0, 0.2);
 }
+
 /* تسميات الحقول */
 .form-container label {
     display: block;
     font-weight: bold;
     color: #333;
 }
+
 .form-container input,
 .form-container textarea {
     width: 100%;

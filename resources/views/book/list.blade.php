@@ -8,6 +8,7 @@
         <th>Description</th>
         <th>Price</th>
         <th>Author</th>
+        <th>Student</th>
         <th>Image</th>
         <th>created_at</th>
         <th scope="col-2">Actions</th>
@@ -21,6 +22,7 @@
                 <td>{{$book->description}}</td>
                 <td>{{$book->price}}</td>
                 <td>{{$book->author? $book->author->name:NULL}}</td>
+                <td>{{$book->student? $book->student->name:NULL}}</td>
                 <td><img src="{{ asset($book->image) }}" alt="{{ $book->name }}" class="img-thumbnail" width="100"></td>
                 <td>{{ \Carbon\Carbon::parse($book->created_at)->format('d/m/Y H:i') }}</td>
                 <td>
@@ -38,7 +40,7 @@
 
     </tbody>
     <tr>
-        <td colspan="8"><a href="/books/create"><button class="btn btn-success">Create New Book <i
+        <td colspan="9"><a href="/books/create"><button class="btn btn-success">Create New Book <i
                         class="fa-solid fa-pen-to-square"></i></button></a></td>
     </tr>
 </table>

@@ -28,7 +28,7 @@ class AuthorController extends Controller
      
         $books= Book::all();
         $author = Author::find($id);
-        return view('author.edit',compact('author'),compact('books'));
+        return view('author.edit',compact('author','books'));
     }
 
     public function update(Request $request)
