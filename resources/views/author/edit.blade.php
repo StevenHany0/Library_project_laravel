@@ -19,7 +19,7 @@
         @enderror
 
         <label for="email">Email:</label>
-        <input type="text" id="email" name="email" value="{{$author->email}}">
+        <input type="email" id="email" name="email" value="{{$author->email}}">
         @error('email')
             <div style="color: red;">{{ $message }}</div>
         @enderror

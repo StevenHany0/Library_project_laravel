@@ -18,7 +18,7 @@
         @enderror
 
         <label for="email">Email:</label>
-        <input type="text" id="email" name="email" value="{{old('email')}}">
+        <input type="email" id="email" name="email" value="{{old('email')}}">
         @error('email')
             <div style="color: red;">{{ $message }}</div>
         @enderror

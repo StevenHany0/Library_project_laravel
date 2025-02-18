@@ -75,7 +75,7 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function delete($id)
+    public function destroy($id)
     {
         $category=Category::find($id);
         $category->delete();

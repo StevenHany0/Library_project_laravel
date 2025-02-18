@@ -110,7 +110,7 @@ class AuthorController extends Controller
         return view('author.list',compact('authors'));
     }
 
-    public function delete($id)
+    public function destroy($id)
     {
         $author = Author::find($id);
         $author->delete();

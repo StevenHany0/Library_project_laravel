@@ -13,7 +13,7 @@
         @enderror
 
         <label for="email">Email:</label>
-        <textarea id="email" name="email">{{$student->email}}</textarea>
+        <input type="email" id="email" name="email">{{$student->email}}</input>
         @error('email')
             <div style="color: red;">{{ $message }}</div>
         @enderror

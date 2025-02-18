@@ -15,7 +15,6 @@ body {
 }
 
 
-
 .menu {
     margin-top: 40px;
     position: fixed;
@@ -26,10 +25,14 @@ body {
     padding: 30px 10px 20px 0px;
     overflow: hidden;
     transition: 0.5s;
+    z-index: 1;
+    
+   
 }
 
 .menu:hover {
     width: 280px;
+    
 }
 
 .profile {
@@ -86,6 +89,9 @@ ul li a i {
 .content {
     width: 100%;
     margin: 20px;
+   
+   
+
 }
 
 .content * {
