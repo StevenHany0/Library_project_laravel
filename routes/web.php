@@ -82,6 +82,7 @@ Route::middleware(Auth::class)->group(function () {
 
         Route::delete('/categories/delete/{id}', 'destroy')->name('categories.delete');
 
+        
     });
 
     Route::get('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout');

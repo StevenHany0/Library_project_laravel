@@ -2,10 +2,10 @@
 
 @section('my-body')
 <div class="container text-center mt-5">
-    <h1 class="mb-3">Welcome to Our Website</h1>
-    <p class="lead">Discover amazing content and explore new opportunities.</p>
+    <h1 class="mb-3 text-white">Welcome to Our Website</h1>
+    <p class="lead text-white">Discover amazing content and explore new opportunities.</p>
 
-    <!-- Featured Sections -->
+   @guest
     <div class="row mt-4">
         <div class="col-md-4">
             <div class="card shadow-sm">
@@ -42,5 +42,7 @@
         <p>Sign up today and be a part of something great.</p>
         <a href="/auth/register" class="btn btn-light btn-lg">Sign Up</a>
     </div>
+
+    @endguest
 </div>
 @endsection

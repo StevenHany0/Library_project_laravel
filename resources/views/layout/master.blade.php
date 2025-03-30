@@ -10,7 +10,7 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-sm fixed-top" style=" background-color:#123;">
+  <nav class="navbar navbar-expand-sm fixed-top" style="background-color:rgba(17, 34, 51, 0.916);">
     <form class="d-flex ms-auto" action="" method="GET">
       <input class="form-control me-2" type="text" name="query" placeholder="Search" value="{{ request('query') }}">
       <button class="btn btn-success" type="submit">Search</button>

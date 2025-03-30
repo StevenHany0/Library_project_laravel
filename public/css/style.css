@@ -2,6 +2,7 @@
 
     color: white;
     font-family: sans-serif;
+
 }
 
 :root {
@@ -10,15 +11,15 @@
 }
 
 body {
-    background-color: #001;
+    background-image: url('https://cdn.pixabay.com/photo/2016/08/24/16/20/books-1617327_1280.jpg');
     display: flex;
 }
 
 
 .menu {
-    margin-top: 40px;
+    margin-top: 53px;
     position: fixed;
-    background-color: #123;
+    background-color: rgba(17, 34, 51, 0.916);
     width: 100px;
     height: hv;
     min-height: 100vh;
