@@ -1,66 +1,235 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Library Management System (Laravel 11)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Overview
 
-## About Laravel
+The **Library Management System** is a Laravel 11 web application designed to manage books, authors, students, and categories within a library environment. The system provides full CRUD (Create, Read, Update, Delete) functionality for all resources, supports authentication-protected routes, and includes image upload capabilities for book covers and author profiles.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This README provides a high-level view of the system architecture, core entities, technology stack, and workflows.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Purpose & Scope
 
-## Learning Laravel
+The system is built to:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+* Manage library resources efficiently.
+* Track book ownership, borrowing, and categorization.
+* Provide a secure, user-friendly web interface for administrators and staff.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+It supports:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+* Role-based access (via authentication middleware).
+* File uploads and automatic file management.
+* RESTful route structure.
+* API access using token-based authentication (Sanctum).
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## System Architecture
 
-### Premium Partners
+The application follows Laravel’s **Model-View-Controller (MVC)** architecture with clear separation of concerns.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### High-Level MVC Structure
 
-## Contributing
+* **Routing Layer** – `routes/web.php`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+  * Defines all web routes grouped by resource.
+  * Follows RESTful conventions for all CRUD operations.
 
-## Code of Conduct
+* **Middleware Layer** – `app/Http/Middleware/Auth.php`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+  * Protects all resource routes.
+  * API routes use `auth:sanctum` for token-based authentication.
 
-## Security Vulnerabilities
+* **Controller Layer** – `app/Http/Controllers/`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+  * `BookController`, `AuthorController`, `StudentController`, `CategoryController` handle business logic.
+  * `AuthController` manages registration, login, and logout.
 
-## License
+* **Model Layer** – `app/Models/`
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+  * Eloquent ORM models define database relationships and abstractions.
+  * `Book` is the central model linking authors, students, and categories.
+
+* **View Layer** – `resources/views/`
+
+  * Blade templates render HTML pages.
+  * All pages extend the master layout in `resources/views/layout/master.blade.php`.
+
+---
+
+## Core Resources
+
+| Resource   | Controller         | Model    | Key Features                                                                                      |
+| ---------- | ------------------ | -------- | ------------------------------------------------------------------------------------------------- |
+| Books      | BookController     | Book     | Name, description, price, cover image, author assignment, student assignment, multiple categories |
+| Authors    | AuthorController   | Author   | Name, email, bio, job description, profile picture, associated book                               |
+| Students   | StudentController  | Student  | Name, email, phone, borrowed books                                                                |
+| Categories | CategoryController | Category | Name, associated books (many-to-many)                                                             |
+
+Each resource implements full CRUD functionality with validation and authentication.
+
+---
+
+## Route Structure
+
+All resources follow the same RESTful pattern:
+
+* `GET /resource` → List
+* `GET /resource/create` → Show create form
+* `POST /resource` → Store
+* `GET /resource/{id}/edit` → Show edit form
+* `PUT/PATCH /resource/{id}` → Update
+* `DELETE /resource/{id}` → Delete
+
+All routes are wrapped with authentication middleware to ensure only logged-in users can access them.
+
+---
+
+## Technology Stack
+
+### Backend
+
+* **Framework:** Laravel 11
+* **Language:** PHP ^8.2
+* **Authentication:** Laravel Sanctum (API tokens) + Session-based auth (web)
+* **Testing:** Pest
+* **Code Style:** Laravel Pint
+* **Scaffolding:** Laravel Breeze
+
+### Frontend
+
+* **Templating:** Blade
+* **Styling:** Bootstrap 5
+* **Icons:** Font Awesome
+* **Interactivity:** Alpine.js
+* **Asset Bundling:** Vite
+
+---
+
+## Authentication & Request Flow
+
+### Authentication Methods
+
+1. **Session-Based Authentication (Web)**
+
+   * Custom `Auth` middleware protects all web routes.
+   * Unauthenticated users are redirected to `/auth/login`.
+
+2. **Token-Based Authentication (API)**
+
+   * Laravel Sanctum issues API tokens stored in the `personal_access_tokens` table.
+
+### Public Authentication Endpoints
+
+* `GET /auth/register` – Registration form
+* `POST /auth/register` – Create new user
+* `GET /auth/login` – Login form
+* `POST /auth/login` – Authenticate user
+* `GET /auth/logout` – Log out user
+
+---
+
+## Data Model & Relationships
+
+The data model centers around the **Book** entity:
+
+* **Book → Author** (belongsTo)
+
+  * Each book optionally belongs to one author via `author_id`.
+
+* **Book → Student** (belongsTo)
+
+  * Each book optionally belongs to one student via `student_id`, indicating borrowing/assignment.
+
+* **Book → Category** (belongsToMany)
+
+  * Books can belong to multiple categories through a pivot table.
+
+* **Author → Book** (hasOne)
+
+  * Authors reference one featured book via `book_id`.
+
+All models use Laravel’s Eloquent ORM with the `HasFactory` trait.
+
+---
+
+## Key Features
+
+### CRUD Operations
+
+* Full management of books, authors, students, and categories.
+* Server-side validation on all create and update operations.
+* Soft delete support for all resources.
+
+### File Management
+
+* Image uploads for book covers and author profiles.
+* Files stored in: `public/assets/files/`
+* Automatic cleanup of old files on update.
+* Validation for image formats: jpeg, jpg, gif, webp.
+
+### User Interface
+
+* Master layout with fixed sidebar navigation.
+* Top navbar with search functionality.
+* Authentication-aware UI using `@auth` and `@guest`.
+* Session flash messages displayed using Bootstrap toasts.
+* User profile display for authenticated users.
+
+### Data Integrity
+
+* Many-to-many category assignment via pivot table.
+* Foreign key constraints enforce referential integrity.
+* Cascade deletion for related entities.
+
+### API Support
+
+* Token-based authentication via Sanctum.
+* Separate API routes from web routes.
+* Token management through `personal_access_tokens` table.
+
+---
+
+## Directory Structure
+
+```text
+app/Http/Controllers/   # Business logic controllers
+app/Http/Middleware/    # Custom middleware (Auth)
+app/Models/             # Eloquent ORM models
+database/migrations/    # Database schema definitions
+resources/views/        # Blade templates
+resources/views/layout/ # Master layout and partials
+routes/                 # Web and API route definitions
+public/assets/files/    # Uploaded images storage
+composer.json           # PHP dependency configuration
+package.json            # JavaScript dependency configuration
+```
+
+---
+
+## Additional Documentation (PDFs)
+
+You can find detailed technical documentation in the following PDF files:
+
+* 📄 [Authentication & Security](docs/authentication.pdf)
+* 📄 [Database Design](docs/database.pdf)
+* 📄 [MVC Structure](docs/MVC%20structure.pdf)
+* 📄 [Routing System](docs/Routes.pdf)
+
+---
+
+## Next Steps
+
+For more detailed information:
+
+* **Installation & Setup:** See *Getting Started*
+* **MVC Architecture Details:** See *Application Architecture*
+* **Authentication & Security:** See *Authentication & Security*
+* **Resource CRUD Details:** See *Resource Management*
+* **Frontend UI:** See *Frontend & User Interface*
+* **Database Schema:** See *Data Layer*
+
+---
+
+*Maintained by Steven Hany Elia*
