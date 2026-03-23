@@ -1,3 +1,12 @@
+# Stage 1 - Build Frontend (Vite)
+FROM node:18 AS frontend
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build   # default outputs to public/build
+
+# Stage 2 - Backend (Laravel + PHP + Composer)
 FROM php:8.2-fpm
 
 # Install system dependencies
@@ -13,17 +22,19 @@ WORKDIR /var/www
 # Copy app files
 COPY . .
 
+# Copy built frontend from Stage 1
+COPY --from=frontend /app/public/build ./public/build
+
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Laravel setup
+# Clear caches
 RUN php artisan config:clear && \
     php artisan route:clear && \
     php artisan view:clear
-    
-# Copy entrypoint and make executable
+
+# Entrypoint to run migrations + start server
 COPY docker-entrypoint.sh /var/www/docker-entrypoint.sh
 RUN chmod +x /var/www/docker-entrypoint.sh
 
-# Set CMD to run entrypoint
 CMD ["/var/www/docker-entrypoint.sh"]
