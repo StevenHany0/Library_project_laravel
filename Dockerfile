@@ -20,5 +20,10 @@ RUN composer install --no-dev --optimize-autoloader
 RUN php artisan config:clear && \
     php artisan route:clear && \
     php artisan view:clear
+    
+# Copy entrypoint and make executable
+COPY docker-entrypoint.sh /var/www/docker-entrypoint.sh
+RUN chmod +x /var/www/docker-entrypoint.sh
 
-CMD ["./docker-entrypoint.sh"]
+# Set CMD to run entrypoint
+CMD ["/var/www/docker-entrypoint.sh"]
