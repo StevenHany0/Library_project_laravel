@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use App\Models\Book;
-use App\Models\Author;  
+use App\Models\Author;
 use App\Models\Student;
 use App\Models\Category;
 
@@ -29,7 +29,7 @@ class BookController extends Controller
 
     public function store(Request $request)
     {
-    
+
 
         $request->validate(
             [
@@ -41,7 +41,7 @@ class BookController extends Controller
                 'student_id' => 'nullable',
                 'category_ids' => 'required',
                 'category_ids.*' => 'exists:categories,id'
-               
+
             ]
         );
 
@@ -69,7 +69,7 @@ class BookController extends Controller
             'student_id' => $student_id
         ];
 
-        
+
         $book=Book::create($data);
         $book->categories()->attach($request->category_ids);
 
@@ -102,7 +102,7 @@ class BookController extends Controller
                 'student_id' => 'nullable',
                 'category_ids' => 'required',
                 'category_ids.*' => 'exists:categories,id'
-                
+
             ]
         );
 
@@ -113,9 +113,7 @@ class BookController extends Controller
             $filename = time() . '.' . $extention;
             $path = 'assets/files/';
             $file->move($path, $filename);
-            if (File::exists($book->image)) {
-                File::delete($book->image);
-            }
+            
         }
 
         $book->update(
@@ -135,7 +133,7 @@ class BookController extends Controller
         return view('book.list', compact('books'));
     }
 
-   
+
 
     public function destroy($id)
     {
