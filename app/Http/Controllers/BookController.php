@@ -107,13 +107,20 @@ class BookController extends Controller
         );
 
         $book = Book::find($request->id);
+        // Default to existing image
+        $imagePath = $book->image;
         if ($request->has('image')) {
             $file = $request->file('image');
             $extention = $file->getClientOriginalExtension();
             $filename = time() . '.' . $extention;
             $path = 'assets/files/';
             $file->move($path, $filename);
-            
+            // Remove old image if it exists
+            if (File::exists($book->image)) {
+                File::delete($book->image);
+            }
+            // Update path to new image
+            $imagePath = $path . $filename;
         }
 
         $book->update(
@@ -121,7 +128,7 @@ class BookController extends Controller
                 'name' => $request->name,
                 'description' => $request->description,
                 'price' => $request->price,
-                'image' => $path . $filename,
+                'image' => $imagePath,
                 'author_id' => $request->author_id,
                 'student_id' => $request->student_id
             ]
