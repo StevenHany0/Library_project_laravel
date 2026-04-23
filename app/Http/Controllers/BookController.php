@@ -52,19 +52,21 @@ class BookController extends Controller
         $student_id = $request->student_id;
 
 
+        // Handle optional image upload for store
+        $imagePath = null;
         if ($request->has('image')) {
             $file = $request->file('image');
             $extention = $file->getClientOriginalExtension();
             $filename = time() . '.' . $extention;
             $path = 'assets/files/';
             $file->move($path, $filename);
-
+            $imagePath = $path . $filename;
         }
         $data = [
             'name' => $name,
             'description' => $description,
             'price' => $price,
-            'image' => $path . $filename,
+            'image' => $imagePath,
             'author_id' => $author_id,
             'student_id' => $student_id
         ];
@@ -138,7 +140,15 @@ class BookController extends Controller
     public function destroy($id)
     {
         $book = Book::find($id);
-        $book->delete();
+        if ($book) {
+            // Remove associated image if exists
+            if (File::exists($book->image)) {
+                File::delete($book->image);
+            }
+            // Detach related categories to clean up pivot table
+            $book->categories()->detach();
+            $book->delete();
+        }
         $books = Book::all();
         return view('book.list', compact('books'));
     }
