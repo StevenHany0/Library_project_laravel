@@ -21,7 +21,7 @@
     <ul>
       <li class="profile ">
         <div class="img-box">
-          <img src="{{asset('assets/files/1739288672.JPG')}}" alt="profile" />
+          <img src="{{asset('assets\files\user.avif')}}" alt="profile" />
         </div>
         <h2>{{ Auth::user()->name ?? "Guest" }} </h2>
       </li>
