@@ -44,20 +44,16 @@ class AuthorController extends Controller
             ]
         );
         $author = Author::find($request->id);
-        // Default to existing profile_pic
-        $profilePath = $author->profile_pic;
         if ($request->has('profile_pic')) {
             $file = $request->file('profile_pic');
             $extention = $file->getClientOriginalExtension();
             $filename = time() . '.' . $extention;
             $path = 'assets/files/';
             $file->move($path, $filename);
-            // Remove old profile_pic if it exists
+            
             if (File::exists(public_path($author->profile_pic))) {
                 File::delete(public_path($author->profile_pic));
             }
-            // Update path to new image
-            $profilePath = $path . $filename;
         }
         $author->update(
             [
@@ -66,7 +62,7 @@ class AuthorController extends Controller
                 'bio' => $request->bio,
                 'email' => $request->email,
                 'book_id' => $request->book_id,
-                'profile_pic' => $profilePath
+                'profile_pic' => $path . $filename
             ]
         );
         
@@ -89,15 +85,14 @@ class AuthorController extends Controller
             ]
         );
 
-        // Optional profile_pic handling
-        $profilePath = null;
         if ($request->has('profile_pic')) {
             $file = $request->file('profile_pic');
             $extention = $file->getClientOriginalExtension();
             $filename = time() . '.' . $extention;
             $path = 'assets/files/';
             $file->move($path, $filename);
-            $profilePath = $path . $filename;
+            
+            
         }
 
         $data = [
@@ -106,7 +101,7 @@ class AuthorController extends Controller
             'bio' => $request->bio,
             'email' => $request->email,
             'book_id' => $request->book_id,
-            'profile_pic' => $profilePath
+            'profile_pic' => $path . $filename
         ];
 
         Author::create($data);

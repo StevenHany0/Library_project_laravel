@@ -12,9 +12,9 @@ class Author extends Model
 
     protected $fillable = ['name', 'bio', 'profile_pic','job_description','email','book_id'];
 
-    public function books()
+    public function book()
     {
-        return $this->hasMany(Book::class);
+        return $this->hasone(Book::class);
     }
 
 }
